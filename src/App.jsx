@@ -22,16 +22,16 @@ function App() {
         
         <AuditSection />
 
-        <section id="testimonials" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 p-8">
+        <section id="testimonials" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 px-8 py-16">
           <h2 className="text-center text-lumirise-color-4">Témoignages</h2>
         </section>
-        <section id="faq" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-2 p-8">
+        <section id="faq" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-2 px-8 py-16">
           <h2 className="text-center text-lumirise-color-4">FAQ</h2>
         </section>
-        <section id="contact" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 p-8">
+        <section id="contact" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 px-8 py-16">
           <h2 className="text-center text-lumirise-color-4">Contact</h2>
         </section>
-        <section id="booking" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-2 p-8">
+        <section id="booking" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-2 px-8 py-16">
           <h2 className="text-center text-lumirise-color-4">Prise de RDV</h2>
         </section>
       </main>

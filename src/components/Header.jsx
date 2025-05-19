@@ -12,7 +12,7 @@ const Header = () => {
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
-  }, [isMobileMenuOpen]); 
+  }, [isMobileMenuOpen, isScrolled]); // Added isScrolled to update height on scroll change
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,23 +58,45 @@ const Header = () => {
     headerBgClass = 'bg-lumirise-color-1 shadow-md';
   }
 
+  // Define "Prendre RDV" button classes based on state
+  const baseRdvButtonClasses = 'font-poppins font-medium text-[0.8rem] px-[10px] py-[3px] rounded-button border transition-all duration-300 ease-in-out';
+  let dynamicRdvButtonClasses = '';
+
+  if (atTop) { // Header is transparent (very top, menu closed)
+    dynamicRdvButtonClasses = `bg-transparent border-white text-white hover:bg-white hover:text-lumirise-color-3`;
+  } else { // Header is solid (scrolled OR mobile menu open)
+    // Scrolled style: no fill, 1px border, contrasted text
+    dynamicRdvButtonClasses = `bg-transparent border-lumirise-color-4 text-lumirise-color-4 hover:bg-lumirise-color-4 hover:text-white`;
+  }
+
 
   return (
     <motion.header
       id="header"
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${headerBgClass}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ease-in-out ${headerBgClass}`}
     >
-      <div className="container mx-auto flex flex-col items-center pt-4 pb-2 md:pt-6 md:pb-3">
-        <a href="#hero" className={`text-3xl md:text-4xl font-montserrat font-semibold ${logoColor} transition-colors duration-300 mb-3 md:mb-4`}>
+      <div className={`
+        container mx-auto flex flex-col items-center
+        transition-all duration-300 ease-in-out
+        ${isScrolled ? 'pt-2 pb-1 md:pt-3 md:pb-2' : 'pt-4 pb-2 md:pt-6 md:pb-3'} 
+      `}>
+        <a 
+          href="#hero" 
+          className={`
+            text-3xl md:text-4xl font-montserrat font-semibold ${logoColor}
+            transition-all duration-300 ease-in-out
+            ${isScrolled ? 'opacity-0 max-h-0 invisible overflow-hidden pointer-events-none mb-0' : 'opacity-100 max-h-[initial] visible mb-3 md:mb-4'}
+          `}
+        >
           LUMIRISE
         </a>
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center"> {/* Removed space-x-6 */}
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className={`font-poppins font-medium text-[15px] transition-colors duration-300
+              className={`font-poppins font-medium text-[0.8rem] mx-8 transition-colors duration-300 ease-in-out
                           ${atTop ? (link.special ? 'text-yellow-400' : 'text-white hover:text-yellow-400')
                                   : `text-lumirise-color-4 hover:text-lumirise-color-3`}`}
             >
@@ -82,9 +104,7 @@ const Header = () => {
             </a>
           ))}
           <a href="#booking"
-             className={`font-poppins font-medium text-[15px] px-[20px] py-[10px] rounded-button border transition-all duration-300
-                        ${atTop ? 'bg-transparent border-white text-white hover:bg-white hover:text-lumirise-color-3'
-                                : 'bg-lumirise-color-3 border-lumirise-color-3 text-white hover:bg-opacity-80 hover:border-opacity-80'}`}
+             className={`${baseRdvButtonClasses} ${dynamicRdvButtonClasses}`}
           >
             Prendre RDV
           </a>
@@ -104,17 +124,19 @@ const Header = () => {
             exit="exit"
             transition={{ duration: 0.2 }}
             className="md:hidden absolute top-full left-0 right-0 bg-lumirise-color-1 shadow-lg py-4"
-            style={{ backgroundColor: 'rgba(248, 248, 248, 1)'}}
+            style={{ backgroundColor: 'rgba(248, 248, 248, 1)'}} // Kept specific RGBA for mobile menu background
           >
             <nav className="flex flex-col items-center space-y-4">
               {navLinks.map((link) => (
                 <a key={link.href} href={link.href}
-                   className={`nav-link text-lg ${link.special && atTop ? 'text-yellow-400' : 'text-lumirise-color-4'} hover:text-lumirise-color-3`}
+                   className={`nav-link text-lg ${link.special && atTop /* atTop might not be relevant here if menu is open */ ? 'text-yellow-400' : 'text-lumirise-color-4'} hover:text-lumirise-color-3`}
                    onClick={toggleMobileMenu}>
                   {link.label}
                 </a>
               ))}
-              <a href="#booking" className="btn-primary-header text-lg mt-2 bg-lumirise-color-3 text-white px-[20px] py-[10px]" onClick={toggleMobileMenu}>
+              <a href="#booking" 
+                 className="btn-primary-header text-lg mt-2 bg-lumirise-color-3 text-white px-[20px] py-[10px]" // Mobile menu button retains its original styling for now
+                 onClick={toggleMobileMenu}>
                 Prendre RDV
               </a>
             </nav>
