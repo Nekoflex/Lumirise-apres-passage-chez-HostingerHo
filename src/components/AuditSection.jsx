@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button'; // Assuming Button component is set up for variants
+import { Button } from '@/components/ui/button';
 
 const auditBlocksData = [
   {
@@ -14,9 +14,8 @@ const auditBlocksData = [
     ],
     objective: 'Comprendre ce qui freine vos réservations — et comment y remédier.',
     ctaText: 'Auditer mon site web',
-    ctaLink: '#contact', // Or a specific link/modal trigger
     delay: 0.1,
-    offsetY: 0,
+    offsetY: 'md:translate-y-0', // Base alignment for the first block
   },
   {
     id: 'organization-audit',
@@ -29,9 +28,8 @@ const auditBlocksData = [
     ],
     objective: 'Gagner du temps, fluidifier vos process, alléger votre charge mentale.',
     ctaText: 'Auditer mon organisation',
-    ctaLink: '#contact',
     delay: 0.3,
-    offsetY: 'md:translate-y-8', // Vertical offset for the middle block on medium screens and up
+    offsetY: 'md:translate-y-8', // Vertical offset for the middle block
   },
   {
     id: 'social-media-audit',
@@ -44,9 +42,8 @@ const auditBlocksData = [
     ],
     objective: 'Optimiser visibilité, engagement et stratégie de contenu.',
     ctaText: 'Auditer mes réseaux sociaux',
-    ctaLink: '#contact',
     delay: 0.5,
-    offsetY: 0,
+    offsetY: 'md:translate-y-0', // Base alignment for the third block
   },
 ];
 
@@ -71,7 +68,7 @@ const AuditSection = () => {
           {auditBlocksData.map((block) => (
             <motion.div
               key={block.id}
-              className={`bg-white rounded-lg shadow-xl p-8 flex flex-col h-full ${block.offsetY}`}
+              className={`bg-white rounded-lg shadow-xl p-8 flex flex-col h-full border-dotted border border-lumirise-color-3/30 ${block.offsetY}`}
               custom={block.delay}
               initial="hidden"
               whileInView="visible"
@@ -80,9 +77,12 @@ const AuditSection = () => {
             >
               <h3 className="text-lumirise-color-4 font-montserrat font-semibold text-2xl mb-4">{block.title}</h3>
               <p className="text-lumirise-color-5 font-poppins text-base mb-6 flex-grow">{block.paragraph}</p>
-              <ul className="list-disc list-inside space-y-2 mb-6 text-lumirise-color-5 font-poppins text-sm">
+              <ul className="space-y-2 mb-6 text-lumirise-color-5 font-poppins text-sm">
                 {block.listItems.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <li key={index} className="flex items-start">
+                    <span className="text-lumirise-color-3 mr-2 text-lg leading-tight pt-px select-none">&#8226;</span>
+                    <span>{item}</span>
+                  </li>
                 ))}
               </ul>
               <p className="text-lumirise-color-4 font-poppins font-medium text-base mb-8">{block.objective}</p>
@@ -90,7 +90,6 @@ const AuditSection = () => {
                 variant="outline"
                 className="mt-auto w-full border-lumirise-color-3 text-lumirise-color-3 hover:bg-lumirise-color-3 hover:text-white transition-colors duration-300 py-3"
                 onClick={() => {
-                  // Handle CTA click, e.g., scroll to contact or open modal
                   const contactSection = document.getElementById('contact');
                   if (contactSection) {
                     contactSection.scrollIntoView({ behavior: 'smooth' });
