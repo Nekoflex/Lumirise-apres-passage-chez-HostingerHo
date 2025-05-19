@@ -1,60 +1,33 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
-const projectsData = [
-  { id: 1, title: 'Spa Bien-Être Zen', type: 'Site Web & Branding', imageUrl: 'https://images.pexels.com/photos/3768894/pexels-photo-3768894.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+const initialProjectsData = [
+  { id: 1, title: 'Spa Bien-Être Zen', type: 'Site Web & Community management', imageUrl: 'https://images.pexels.com/photos/3768894/pexels-photo-3768894.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
   { id: 2, title: 'Studio Yoga Harmonie', type: 'Application Mobile', imageUrl: 'https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
   { id: 3, title: 'App Coaching Vitalité', type: 'Plateforme de Coaching', imageUrl: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
   { id: 4, title: 'Dashboard Planning Thérapeute', type: 'Automatisation', imageUrl: 'https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-  { id: 5, title: 'Marketplace YogaFlex', type: 'Application mobile', imageUrl: 'https://images.pexels.com/photos/3822623/pexels-photo-3822623.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-  { id: 6, title: 'Système de relance automatisée', type: 'Email + SMS', imageUrl: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-  { id: 7, title: 'Réservation Spa Paris', type: 'Site WordPress + RDV', imageUrl: 'https://images.pexels.com/photos/1298601/pexels-photo-1298601.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
 ];
 
-const cardVariants = {
-  hover: {
-    y: -8,
-    boxShadow: '0 10px 20px rgba(0,0,0,0.08)',
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
-};
-
 const PortfolioSection = () => {
-  const carouselRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [flexValues, setFlexValues] = useState([1, 3, 1, 1]); // Card 2 (index 1) is open by default
 
-  const scroll = (direction) => {
-    if (carouselRef.current) {
-      const scrollAmount = carouselRef.current.offsetWidth * 0.8; // Scroll by 80% of visible width
-      carouselRef.current.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const checkScrollButtons = () => {
-    if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1); // -1 for precision
-    }
-  };
-
-  useEffect(() => {
-    const currentCarousel = carouselRef.current;
-    if (currentCarousel) {
-      currentCarousel.addEventListener('scroll', checkScrollButtons);
-      checkScrollButtons(); // Initial check
-    }
-    window.addEventListener('resize', checkScrollButtons);
-    return () => {
-      if (currentCarousel) {
-        currentCarousel.removeEventListener('scroll', checkScrollButtons);
+  const handleMouseEnter = (hoveredIndex) => {
+    if (hoveredIndex === 1) { // Hovering Card 2 (already default open)
+      // Ensure it's in its fully open state if somehow it wasn't
+      if (flexValues[1] !== 3) {
+        setFlexValues([1, 3, 1, 1]);
       }
-      window.removeEventListener('resize', checkScrollButtons);
-    };
-  }, []);
+      return;
+    }
 
+    const newFlexValues = [0.5, 2, 0.5, 0.5]; // Base: Card 2 is 2, others are 0.5
+    newFlexValues[hoveredIndex] = 2; // Hovered card is 2
+    setFlexValues(newFlexValues);
+  };
+
+  const handleMouseLeave = () => {
+    setFlexValues([1, 3, 1, 1]); // Reset to initial state
+  };
 
   return (
     <section id="portfolio" className="min-h-screen w-screen flex flex-col items-center justify-center bg-lumirise-color-1 py-16 md:py-24 overflow-hidden">
@@ -64,75 +37,69 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      <div className="relative w-full max-w-7xl mx-auto">
-        {/* Left Fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-lumirise-color-1 to-transparent z-10 pointer-events-none"></div>
-        
-        <motion.div
-          ref={carouselRef}
-          className="flex overflow-x-auto scroll-smooth py-4 px-4 no-scrollbar space-x-6 md:space-x-8 cursor-grab active:cursor-grabbing"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }} // This will be dynamically calculated if needed, but for now, let CSS handle scroll limits
-          onDragEnd={checkScrollButtons} // Check buttons after drag
+      <div className="w-full max-w-7xl mx-auto">
+        <div 
+          className="flex h-[60vh] md:h-[70vh] lg:h-[500px] gap-2"
+          onMouseLeave={handleMouseLeave}
         >
-          {projectsData.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="flex-shrink-0 w-[280px] md:w-[320px] lg:w-[360px] bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group"
-              variants={cardVariants}
-              whileHover="hover"
-            >
-              <div className="w-full h-48 md:h-56 lg:h-64 overflow-hidden">
+          {initialProjectsData.map((project, index) => {
+            const isCardOpen = flexValues[index] >= 2;
+            const card2ImageTransform = index === 1 && flexValues[1] < 3 
+              ? 'scale(0.9) translate(-5%, -5%)' // Diagonal zoom-out for card 2 image
+              : 'scale(1) translate(0,0)';
+
+            return (
+              <div
+                key={project.id}
+                className="h-full relative overflow-hidden cursor-pointer group"
+                style={{ 
+                  flexGrow: flexValues[index],
+                  flexShrink: 0, // Prevent shrinking beyond flex-basis
+                  flexBasis: '0%', // Allow flex-grow to distribute space
+                  transition: 'all 0.5s ease' // Combined transition for flex properties
+                }}
+                onMouseEnter={() => handleMouseEnter(index)}
+              >
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                  className="w-full h-full object-cover"
+                  style={{
+                    transformOrigin: 'center center', // Or adjust for specific diagonal effect, e.g. 'top left' or 'bottom right'
+                    transform: card2ImageTransform,
+                    transition: 'transform 0.5s ease', // Image transform transition
+                  }}
                 />
+                <div 
+                  className="absolute left-0 w-full h-full pointer-events-none"
+                  style={{
+                    top: isCardOpen ? '0%' : '100%',
+                    opacity: isCardOpen ? 1 : 0,
+                    background: 'linear-gradient(0deg, #000000 0%, rgba(0,0,0,0.85) 30%, rgba(255,255,255,0) 60%)', // Adjusted gradient for better text visibility
+                    transition: 'all 0.4s ease',
+                  }}
+                >
+                  {isCardOpen && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white text-center"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} // Delay to sync with overlay
+                    >
+                      <h3 className="text-base md:text-lg font-montserrat font-semibold mb-1 leading-tight">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs md:text-sm font-poppins leading-tight">
+                        {project.type}
+                      </p>
+                    </motion.div>
+                  )}
+                </div>
               </div>
-              <div className="p-6 md:p-8">
-                <h3 className="text-lg md:text-xl font-montserrat font-semibold text-lumirise-color-4 mb-1">
-                  {project.title}
-                </h3>
-                <p className="text-sm md:text-base font-poppins text-lumirise-color-5">
-                  {project.type}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Right Fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-lumirise-color-1 to-transparent z-10 pointer-events-none"></div>
-
-        {/* Navigation Arrows */}
-        {canScrollLeft && (
-          <button
-            onClick={() => scroll(-1)}
-            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/70 hover:bg-white rounded-full shadow-md transition-colors"
-            aria-label="Projet précédent"
-          >
-            <ChevronLeft className="text-lumirise-color-3" size={24} />
-          </button>
-        )}
-        {canScrollRight && (
-          <button
-            onClick={() => scroll(1)}
-            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/70 hover:bg-white rounded-full shadow-md transition-colors"
-            aria-label="Projet suivant"
-          >
-            <ChevronRight className="text-lumirise-color-3" size={24} />
-          </button>
-        )}
+            );
+          })}
+        </div>
       </div>
-      <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-        }
-      `}</style>
     </section>
   );
 };
