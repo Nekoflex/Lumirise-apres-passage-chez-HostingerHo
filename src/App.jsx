@@ -4,7 +4,8 @@ import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import ClientsSection from '@/components/ClientsSection';
 import ServicesSection from '@/components/ServicesSection';
-import AuditSection from '@/components/AuditSection'; // Import the new AuditSection
+import AuditSection from '@/components/AuditSection';
+import PortfolioSection from '@/components/PortfolioSection'; // Import the new PortfolioSection
 import { Toaster } from "@/components/ui/toaster";
 
 function App() {
@@ -17,11 +18,9 @@ function App() {
         <ClientsSection />
         <ServicesSection />
         
-        <section id="portfolio" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 p-8">
-          <h2 className="text-center text-lumirise-color-4">Réalisations</h2>
-        </section>
+        <PortfolioSection /> {/* Use the new PortfolioSection component */}
         
-        <AuditSection /> {/* Use the new AuditSection component */}
+        <AuditSection />
 
         <section id="testimonials" className="min-h-screen w-screen flex items-center justify-center bg-lumirise-color-1 p-8">
           <h2 className="text-center text-lumirise-color-4">Témoignages</h2>
