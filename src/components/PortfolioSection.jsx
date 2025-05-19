@@ -13,7 +13,6 @@ const PortfolioSection = () => {
 
   const handleMouseEnter = (hoveredIndex) => {
     if (hoveredIndex === 1) { // Hovering Card 2 (already default open)
-      // Ensure it's in its fully open state if somehow it wasn't
       if (flexValues[1] !== 3) {
         setFlexValues([1, 3, 1, 1]);
       }
@@ -37,7 +36,8 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto">
+      {/* Changed className here: removed max-w-7xl and mx-auto to make it full width of the section */}
+      <div className="w-full"> 
         <div 
           className="flex h-[60vh] md:h-[70vh] lg:h-[500px] gap-2"
           onMouseLeave={handleMouseLeave}
@@ -54,9 +54,9 @@ const PortfolioSection = () => {
                 className="h-full relative overflow-hidden cursor-pointer group"
                 style={{ 
                   flexGrow: flexValues[index],
-                  flexShrink: 0, // Prevent shrinking beyond flex-basis
-                  flexBasis: '0%', // Allow flex-grow to distribute space
-                  transition: 'all 0.5s ease' // Combined transition for flex properties
+                  flexShrink: 0, 
+                  flexBasis: '0%', 
+                  transition: 'all 0.5s ease' 
                 }}
                 onMouseEnter={() => handleMouseEnter(index)}
               >
@@ -65,9 +65,9 @@ const PortfolioSection = () => {
                   alt={project.title} 
                   className="w-full h-full object-cover"
                   style={{
-                    transformOrigin: 'center center', // Or adjust for specific diagonal effect, e.g. 'top left' or 'bottom right'
+                    transformOrigin: 'center center',
                     transform: card2ImageTransform,
-                    transition: 'transform 0.5s ease', // Image transform transition
+                    transition: 'transform 0.5s ease', 
                   }}
                 />
                 <div 
@@ -75,8 +75,9 @@ const PortfolioSection = () => {
                   style={{
                     top: isCardOpen ? '0%' : '100%',
                     opacity: isCardOpen ? 1 : 0,
-                    background: 'linear-gradient(0deg, #000000 0%, rgba(0,0,0,0.85) 30%, rgba(255,255,255,0) 60%)', // Adjusted gradient for better text visibility
-                    transition: 'all 0.4s ease',
+                    // Updated background gradient and transition
+                    background: 'linear-gradient(0deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 20%, rgba(255, 255, 255, 0) 100%)',
+                    transition: 'all 0.3s ease',
                   }}
                 >
                   {isCardOpen && (
@@ -84,7 +85,7 @@ const PortfolioSection = () => {
                       className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white text-center"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} // Delay to sync with overlay
+                      transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} 
                     >
                       <h3 className="text-base md:text-lg font-montserrat font-semibold mb-1 leading-tight">
                         {project.title}
