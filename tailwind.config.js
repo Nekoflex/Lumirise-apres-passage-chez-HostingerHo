@@ -20,7 +20,7 @@ module.exports = {
 			colors: {
 				'lumirise-color-1': '#F8F8F8', // fond principal
 				'lumirise-color-2': '#F2EDE9', // fonds secondaires
-				'lumirise-color-3': '#A3B1A7', // accent/CTA
+				'lumirise-color-3': '#A3B1A7', // accent/CTA (original, user requested #54756B for specific elements)
 				'lumirise-color-4': '#333333', // texte principal
 				'lumirise-color-5': '#5E5E5E', // texte secondaire
 				border: 'hsl(var(--border))',
@@ -83,6 +83,9 @@ module.exports = {
 			},
       boxShadow: {
         'header-scroll': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+      },
+      gridTemplateColumns: {
+        'testimonials': '28% 44% 28%',
       }
 		},
 	},
